@@ -88,11 +88,14 @@ public with sharing class DMLOperations {
      */
     public static void updateContactLastName(Id contactId, String newLastName) {
         // Retrieve the Contact from the database
-        // [SELECT Id FROM Contact WHERE Id = :contactId]
+
+       Contact contact2 = new Contact [SELECT Id FROM Contact WHERE Id = :contactId LIMIT 1];
 
         // Update the Contact's last name
+        contact2.LastName = newLastName;
 
         // Update the Contact in the database
+        update contact2;
     }
 
     /**
