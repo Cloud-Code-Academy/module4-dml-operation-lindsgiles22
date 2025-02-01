@@ -31,13 +31,16 @@ public with sharing class DMLOperations {
      */
     public static Id insertNewAccount() {
         // Create a new Account instance
-
+        Account acc1 = new Account();
         // Set some fields on the Account
-
+        acc1.name = 'Disney';
+        acc1.phone = '785-241-6456';
+        
         // Insert the Account into the database
+        insert acc1;
 
         // Return the Id of the newly created Account
-        return null;
+        return acc1.Id;
     }
 
     /**
