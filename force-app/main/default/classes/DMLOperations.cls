@@ -166,10 +166,19 @@ public with sharing class DMLOperations {
      * @param oppNames The list of Opportunity names.
      */
     public static void upsertOpportunities(String accountName, List<String> oppNames) {
+        // Create list to add Opportunities to
+        List<Opportunity> oppsToCreate = new List<Opportunity>();
         // Loop through each Opportunity name
+        for(String oppName: oppNames) {
             // Create an Opportunity with the given name
+            Opportunity opp = new Opportunity (Name = oppName, AccountId = [SELECT Id FROM Account WHERE Name = :accountName LIMIT 1]);
             // Add the Opportunity to the list
+            oppsToCreate.add(opp);
+            
     }
+    upsert oppsToCreate;
+}
+    
     
     /**
      * Question 9
