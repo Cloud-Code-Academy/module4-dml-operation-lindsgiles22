@@ -51,8 +51,9 @@ public with sharing class DMLOperations {
      */
     public static void createAccount(String name, String industry) {
         // Create a new Account and set the fields inline
-
+        Account acc2 = new Account(name = name, industry = industry);
         // Insert the Account
+        insert acc2;
     }
 
     
@@ -64,14 +65,18 @@ public with sharing class DMLOperations {
      */
     public static Id insertNewContact(Id accountId) {
         // Create a new Contact instance
-
+        Contact contact1 = new Contact();
         // Set some fields on the Contact
+        contact1.FirstName = 'Ariel';
+        contact1.LastName = 'Tritan';
+        contact1.title = 'Princess of the Sea';
         // Set the AccountId field to the given accountId
-
+        contact1.AccountId = accountId;
         // Insert the Contact into the database
+        insert contact1;
 
         // Return the Id of the newly created Contact
-        return null;
+        return contact1.Id;
     }
 
     /**
