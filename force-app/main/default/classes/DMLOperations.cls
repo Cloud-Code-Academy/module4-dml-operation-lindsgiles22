@@ -89,7 +89,7 @@ public with sharing class DMLOperations {
     public static void updateContactLastName(Id contactId, String newLastName) {
         // Retrieve the Contact from the database
 
-       Contact contact2 = [SELECT Id FROM Contact WHERE Id = :contactId LIMIT 1];
+       Contact contact2 = [SELECT Id FROM Contact WHERE Id = :contactId];
 
         // Update the Contact's last name
         contact2.LastName = newLastName;
@@ -107,7 +107,7 @@ public with sharing class DMLOperations {
      */
     public static void updateOpportunityStage(Id oppId, String newStage) {
         // Retrieve the Opportunity from the database
-        Opportunity opp = [SELECT Id FROM Opportunity WHERE Id = :oppId LIMIT 1];
+        Opportunity opp = [SELECT Id FROM Opportunity WHERE Id = :oppId];
 
         // Update the Opportunity's stage
         opp.StageName = newStage;
@@ -125,9 +125,12 @@ public with sharing class DMLOperations {
      */
     public static void updateAccountFields(Id accountId, String newName, String newIndustry) {
         // Query the account
-        // [SELECT Id FROM Account WHERE Id = :accountId]
+        Account acc = [SELECT Id FROM Account WHERE Id = :accountId];
 
         // Update the Account with the given Id with the new name and industry
+        acc.Name = newName;
+        acc.Industry = newIndustry;
+        update acc;
     }
 
 
