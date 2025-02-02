@@ -190,19 +190,21 @@ public with sharing class DMLOperations {
 	 */
 	public static Account upsertAccount(String accountName) {
 		// Query for the Account
-		List<Account> accounts = [SELECT Id FROM Account WHERE Name = :accountName];
+        Account account = [SELECT Id, Description FROM Account WHERE Name = :accountName LIMIT 1];
 
-		// if the Account exists, update the description
-            if(account != null) {
-                account.description = 'Updated Account';
-            // otherwise, create a new Account and set the description
-            } else {
-                    account = new Account(Name = accountName, Description = 'New Account');
-            }
-		// Upsert the Account
+        // If the account exists, update it
+        if (account != null) {
+            account.Description = 'Updated Account';
+        } else {
+            // Otherwise, create a new account
+            account = new Account(Name = accountName, Description = 'New Account');
+        }
+    
+        // Upsert the account
         upsert account;
+    
         return account;
-	}
+    }
 
     /**
      * Question 10
@@ -215,14 +217,19 @@ public with sharing class DMLOperations {
 	 */
 	public static void upsertAccountsWithContacts(List<Contact> contactsToUpsert) {
 		// Loop through each Contact
+        for(Contact contact1 : contactsToUpsert) {
+            // Extract the Account Name from Contact's LastName
+            String accountName = contact1.LastName;
 
-		// Extract the Account Name from Contact's LastName
+            // Get the account based on the name or create one if it doesn't exist
+           Account relatedAccount = upsertAccount(accountName);
 
-		// Get the account based on the name or create one if it doesn't exist
-
-		// Link the Contact to its Account using the Account Id
-
+           // Link the Contact to its Account using the Account Id
+           contact1.AccountId = relatedAccount.Id;
+           }
+        }
 		// Upsert the Contacts
+        upsert contactsToUpsert;
 	}
 
     /**
