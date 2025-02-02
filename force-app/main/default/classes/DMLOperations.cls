@@ -193,11 +193,15 @@ public with sharing class DMLOperations {
 		List<Account> accounts = [SELECT Id FROM Account WHERE Name = :accountName];
 
 		// if the Account exists, update the description
-
-		// otherwise, create a new Account and set the description
-
+            if(account != null) {
+                account.description = 'Updated Account';
+            // otherwise, create a new Account and set the description
+            } else {
+                    account = new Account(Name = accountName, Description = 'New Account');
+            }
 		// Upsert the Account
-		return null;
+        upsert account;
+        return account;
 	}
 
     /**
