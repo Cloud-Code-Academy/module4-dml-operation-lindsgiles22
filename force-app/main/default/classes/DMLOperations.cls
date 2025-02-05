@@ -199,7 +199,7 @@ public with sharing class DMLOperations {
 
         // Loop through each Opportunity name
         for(String oppName: oppNames) {
-            if (existingOppscontainsKey(oppName)) {
+            if (existingOpps.containsKey(oppName)) {
                 // Update existing opportunity
                 Opportunity existingOpp = existingOpps.get(oppName);
                 existingOpp.StageName = 'Prospecting';
@@ -212,7 +212,7 @@ public with sharing class DMLOperations {
             oppsToUpsert.add(opp);
             }    
     }
-    if (!oppsToCreate.isEmpty()) {
+    if (!oppsToUpsert.isEmpty()) {
     upsert oppsToUpsert;
     }
 }
