@@ -188,19 +188,32 @@ public with sharing class DMLOperations {
             upsert acc;
         }
 
+        // Find existing opportunities for the account
+        Map<String, Opportunity> existingOpps = new Map<String, Opportunity>();
+        for (Opportunity opp : [SELECT Id, Name, StageName, CloseDate FROM Opportunity WHERE AccountId = :acc.Id AND Name IN :oppNames]) {
+            existingOpps.put(opp.Name, opp);
+        }
+
         // Create list to add Opportunities to
-        List<Opportunity> oppsToCreate = new List<Opportunity>();
+        List<Opportunity> oppsToUpsert = new List<Opportunity>();
 
         // Loop through each Opportunity name
         for(String oppName: oppNames) {
+            if (existingOppscontainsKey(oppName)) {
+                // Update existing opportunity
+                Opportunity existingOpp = existingOpps.get(oppName);
+                existingOpp.StageName = 'Prospecting';
+                existingOpp.CloseDate = Date.today().addMonths(1);
+                oppsToUpsert.add(existingOpp);
+            } else {
             // Create an Opportunity with the given name
             Opportunity opp = new Opportunity (Name = oppName, AccountId = acc.Id, StageName = 'Prospecting', CloseDate = Date.today().addmonths(1));
             // Add the Opportunity to the list
-            oppsToCreate.add(opp);
-            
+            oppsToUpsert.add(opp);
+            }    
     }
     if (!oppsToCreate.isEmpty()) {
-    upsert oppsToCreate;
+    upsert oppsToUpsert;
     }
 }
     
