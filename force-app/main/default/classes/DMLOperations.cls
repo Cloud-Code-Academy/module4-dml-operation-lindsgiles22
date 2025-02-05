@@ -166,17 +166,42 @@ public with sharing class DMLOperations {
      * @param oppNames The list of Opportunity names.
      */
     public static void upsertOpportunities(String accountName, List<String> oppNames) {
+        // Verify accountName is not null or empty
+        if (String.isblank(accountName) || oppNames == null || oppNames.isEmpty()) {
+            System.debug('Invalid input: Account name or opportunity names are missing.');
+            return;
+        }
+        // Try and find the account with the provided name
+        Account acc;
+        try {
+            List<Account> accounts = [SELECT Id FROM Account WHERE Name = :accountName LIMIT 1];
+            if (!accounts.isEmpty()) {
+                acc = accounts[0]; // Assign the found account
+            }
+        }   catch (Exception e) {
+            System.debug('Error querying Account: ' + e.getMessage());
+            return;
+        }
+        // If account doesn't exist, create it
+        if (acc == null) {
+            acc = new Account(Name = accountName);
+            upsert acc;
+        }
+
         // Create list to add Opportunities to
         List<Opportunity> oppsToCreate = new List<Opportunity>();
+
         // Loop through each Opportunity name
         for(String oppName: oppNames) {
             // Create an Opportunity with the given name
-            Opportunity opp = new Opportunity (Name = oppName, AccountId = [SELECT Id FROM Account WHERE Name = :accountName LIMIT 1]);
+            Opportunity opp = new Opportunity (Name = oppName, AccountId = acc.Id, StageName = 'Prospecting', CloseDate = Date.today().addmonths(1));
             // Add the Opportunity to the list
             oppsToCreate.add(opp);
             
     }
+    if (!oppsToCreate.isEmpty()) {
     upsert oppsToCreate;
+    }
 }
     
     
