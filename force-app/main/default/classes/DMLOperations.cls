@@ -297,7 +297,7 @@ public with sharing class DMLOperations {
         List<Case> casesToCreate = new List<Case>();
 
         for(Integer i = 0; i < numOfCases; i++) {
-            casesToCreate.add(new Case(AccountId = accountId, CaseOrigin = 'Web'));
+            casesToCreate.add(new Case(AccountId = accountId, Origin = 'Web'));
         }
         // Insert the cases
         insert casesToCreate;
