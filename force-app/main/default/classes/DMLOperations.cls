@@ -216,7 +216,10 @@ public with sharing class DMLOperations {
 	 * @param contactsToUpsert List of Contacts to be upserted and linked to accounts.
 	 */
 	public static void upsertAccountsWithContacts(List<Contact> contactsToUpsert) {
-		// Loop through each Contact
+		// Create a list to store updated contacts
+        List<Contact> contactsToUpdate = new List<Contact>();
+        
+        // Loop through each Contact
         for(Contact contact1 : contactsToUpsert) {
             // Extract the Account Name from Contact's LastName
             String accountName = contact1.LastName;
@@ -226,11 +229,17 @@ public with sharing class DMLOperations {
 
            // Link the Contact to its Account using the Account Id
            contact1.AccountId = relatedAccount.Id;
+
+           // Add contact to update list
+            contactsToUpdate.add(contact1);
            }
-        }
+        
 		// Upsert the Contacts
-        upsert contactsToUpsert;
-	}
+        if (!contactsToUpdate.isEmpty()) {
+            upsert contactsToUpdate;
+        }
+    }
+	
 
     /**
      * Question 11
