@@ -32,9 +32,19 @@ public with sharing class DMLOperations {
     public static Id insertNewAccount() {
         // Create a new Account instance
         Account acc1 = new Account();
+
+        // Generate a random number to be appended to account
+        Integer randomNum = Math.abs(Math.mod(Math.random() * 1000000, 1000000));
+
+        // Genterate a random phone number
+        String areaCode = String.valueOf(Math.floor(Math.random() * 900, 900) + 100); // Ensures area code is 3 digit number (100-999)
+        String centralOfficeCode = String.valueOf(Math.floor(Math.random() * 900, 900) + 100); // 100-99
+        String lineNumber = String.valueOf(Math.floor(Math.random() *10000, 10000) + 1000).left(4); // 1000-9999
+
+        String randomPhone = areaCode + '-' + centralOfficeCode + '-' + lineNumber;
         // Set some fields on the Account
-        acc1.name = 'Disney';
-        acc1.phone = '785-241-6456';
+        acc1.name = 'Account' + randomNum; // Appending a random numer so account is unique
+        acc1.phone = randomPhone;
         
         // Insert the Account into the database
         insert acc1;
