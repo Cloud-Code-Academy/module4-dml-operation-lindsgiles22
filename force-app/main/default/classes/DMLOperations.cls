@@ -126,7 +126,7 @@ public with sharing class DMLOperations {
 
         // Update the Opportunity's stage
         opp.StageName = newStage;
-        // Update the Opportunity in the database
+        // Update the Opportunities in bulk
         update opp;
     }
 
@@ -183,7 +183,6 @@ public with sharing class DMLOperations {
     public static void upsertOpportunities(String accountName, List<String> oppNames) {
         // Verify accountName is not null or empty
         if (String.isblank(accountName) || oppNames == null || oppNames.isEmpty()) {
-            System.debug('Invalid input: Account name or opportunity names are missing.');
             return;
         }
         // Try and find the account with the provided name
@@ -194,7 +193,6 @@ public with sharing class DMLOperations {
                 acc = accounts[0]; // Assign the found account
             }
         }   catch (Exception e) {
-            System.debug('Error querying Account: ' + e.getMessage());
             return;
         }
         // If account doesn't exist, create it
