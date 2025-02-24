@@ -34,17 +34,17 @@ public with sharing class DMLOperations {
         Account acc1 = new Account();
 
         // Generate a random number to be appended to account
-        Integer randomNum = Math.abs(Math.mod(Math.random() * 1000000, 1000000));
+        Integer randomNum = Math.abs((Integer)(Math.random() * 1000000));
 
         // Genterate a random phone number
-        String areaCode = String.valueOf(Math.floor(Math.random() * 900, 900) + 100); // Ensures area code is 3 digit number (100-999)
-        String centralOfficeCode = String.valueOf(Math.floor(Math.random() * 900, 900) + 100); // 100-99
-        String lineNumber = String.valueOf(Math.floor(Math.random() *10000, 10000) + 1000).left(4); // 1000-9999
+        String areaCode = String.valueOf((int)(Math.floor(Math.random() * 900) + 100)); // Ensures area code is 3 digit number (100-999)
+        String centralOfficeCode = String.valueOf((int)(Math.floor(Math.random() * 900) + 100)); // 100-999
+        String lineNumber = String.valueOf((int)(Math.floor(Math.random() * 9000) + 1000)); // 1000-9999
 
         String randomPhone = areaCode + '-' + centralOfficeCode + '-' + lineNumber;
         // Set some fields on the Account
-        acc1.name = 'Account' + randomNum; // Appending a random numer so account is unique
-        acc1.phone = randomPhone;
+        acc1.Name = 'Account' + randomNum; // Appending a random numer so account is unique
+        acc1.Phone = randomPhone;
         
         // Insert the Account into the database
         insert acc1;
@@ -60,8 +60,10 @@ public with sharing class DMLOperations {
      * @param industry The industry of the account to be created.
      */
     public static void createAccount(String name, String industry) {
+        // Describe the Account object
+        Schema.DescribeSObjectResult accountDescribe = Account.SObjectType.getDescribe();
         // Create a new Account and set the fields inline
-        if (Schema.SObjectType.Account.isCreatable()) {
+        if (accountDescribe.isCreatable()) {
         Account acc2 = new Account();
         acc2.Name = name;
         acc2.Industry = industry;
@@ -70,6 +72,7 @@ public with sharing class DMLOperations {
     } else {
         System.debug('User does not have permission to create an Account');
     }
+}
 
     
     /**
