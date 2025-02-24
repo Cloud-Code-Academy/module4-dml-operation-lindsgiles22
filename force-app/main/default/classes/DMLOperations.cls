@@ -61,11 +61,14 @@ public with sharing class DMLOperations {
      */
     public static void createAccount(String name, String industry) {
         // Create a new Account and set the fields inline
+        if (Schema.SObjectType.Account.isCreatable()) {
         Account acc2 = new Account();
         acc2.Name = name;
         acc2.Industry = industry;
         // Insert the Account
         insert acc2;
+    } else {
+        System.debug('User does not have permission to create an Account');
     }
 
     
